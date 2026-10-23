@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Detalle de paciente — Citas Médicas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: topbar}"></header>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1 th:text="${paciente.nombreCompleto}">Paciente</h1>
+            <p>DNI <span th:text="${paciente.dni}"></span> · Teléfono <span th:text="${paciente.telefono}"></span></p>
+        </div>
+        <a th:href="@{/pacientes}" class="btn btn-ghost">Volver</a>
+    </div>
+
+    <h2 style="margin-bottom:10px;">Citas del paciente</h2>
+    <div class="table-wrap">
+        <div class="table-scroll">
+            <table th:if="${not #lists.isEmpty(paciente.citas)}">
+                <thead>
+                <tr><th>Código</th><th>Médico</th><th>Especialidad</th><th>Fecha</th><th>Hora</th><th>Estado</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${paciente.citas}">
+                    <td class="codigo" th:text="${c.codigoCita}"></td>
+                    <td th:text="${c.medico.nombreCompleto}"></td>
+                    <td th:text="${c.especialidad}"></td>
+                    <td th:text="${c.fecha}"></td>
+                    <td th:text="${c.horaInicio}"></td>
+                    <td><span class="badge" th:classappend="'badge-' + ${c.estado}" th:text="${c.estado}"></span></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="empty-state" th:if="${#lists.isEmpty(paciente.citas)}">Este paciente no tiene citas.</div>
+    </div>
+</div>
+</body>
+</html>

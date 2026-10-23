@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Inicio — Citas Médicas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: topbar}"></header>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Bienvenido, <span th:text="${usuarioActual}">usuario</span></h1>
+            <p>Tu rol es <strong th:text="${rolActual}">ROL</strong>. Estas son las secciones disponibles para ti.</p>
+        </div>
+    </div>
+
+    <div class="cards-inicio">
+        <a th:if="${rolActual == 'ADMINISTRADOR' or rolActual == 'RECEPCIONISTA'}" th:href="@{/citas}">
+            <h3>Citas</h3><p>Registrar, modificar, cancelar y buscar citas.</p></a>
+        <a th:if="${rolActual == 'ADMINISTRADOR' or rolActual == 'MEDICO' or rolActual == 'RECEPCIONISTA'}" th:href="@{/pacientes}">
+            <h3>Pacientes</h3><p>Consulta de pacientes y sus citas.</p></a>
+        <a th:if="${rolActual == 'ADMINISTRADOR' or rolActual == 'RECEPCIONISTA'}" th:href="@{/medicos}">
+            <h3>Médicos</h3><p>Listado de médicos y su carga de citas.</p></a>
+        <a th:if="${rolActual == 'ADMINISTRADOR'}" th:href="@{/usuarios}">
+            <h3>Usuarios</h3><p>Administrar usuarios y asignar roles.</p></a>
+        <a th:if="${rolActual == 'ADMINISTRADOR'}" th:href="@{/roles}">
+            <h3>Roles</h3><p>Administrar los roles del sistema.</p></a>
+        <a th:if="${rolActual == 'ADMINISTRADOR'}" th:href="@{/auditoria}">
+            <h3>Auditoría</h3><p>Bitácora de operaciones del sistema.</p></a>
+    </div>
+
+    <p class="empty-state" th:if="${rolActual != 'ADMINISTRADOR' and rolActual != 'MEDICO' and rolActual != 'RECEPCIONISTA'}">
+        Tu rol todavía no tiene módulos asignados. Contacta con un administrador.
+    </p>
+</div>
+</body>
+</html>

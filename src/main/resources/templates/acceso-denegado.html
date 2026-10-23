@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Acceso denegado — Citas Médicas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: topbar}"></header>
+
+<div class="page">
+    <div class="card">
+        <h1>Acceso denegado (403)</h1>
+        <p class="alert alert-danger" style="margin-top:14px;">
+            Tu rol (<strong th:text="${rolActual}">ROL</strong>) no tiene permiso para acceder a esta sección.
+        </p>
+        <a th:href="@{/inicio}" class="btn btn-primary">Volver al inicio</a>
+    </div>
+</div>
+</body>
+</html>

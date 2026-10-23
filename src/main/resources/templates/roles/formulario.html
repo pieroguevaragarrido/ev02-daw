@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${rolId} != null ? 'Editar rol — Citas Médicas' : 'Registrar rol — Citas Médicas'">Rol</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: topbar}"></header>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1 th:text="${rolId} != null ? 'Editar rol' : 'Registrar rol'">Registrar rol</h1>
+            <p>Un rol nuevo no tendrá acceso a ningún módulo hasta que se configure en SecurityConfig.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <p class="alert alert-danger" th:if="${errorNegocio}" th:text="${errorNegocio}"></p>
+
+        <form th:action="${rolId} != null ? @{'/roles/' + ${rolId}} : @{/roles}"
+              th:object="${rolForm}" method="post" class="form-grid">
+
+            <div class="alert alert-danger field-full" th:if="${#fields.hasErrors('*')}">
+                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+            </div>
+
+            <div class="field">
+                <label>Código del rol</label>
+                <input type="text" th:field="*{nombre}" th:readonly="${rolId != null}" placeholder="Ej. ENFERMERO"/>
+                <div class="hint" th:if="${rolId != null}">El código no se puede modificar porque se usa para autorizar el acceso.</div>
+                <div class="hint" th:if="${rolId == null}">Se guardará en mayúsculas. Solo letras y guion bajo.</div>
+            </div>
+
+            <div class="field">
+                <label>Descripción</label>
+                <input type="text" th:field="*{descripcion}" placeholder="Ej. Enfermero(a)"/>
+            </div>
+
+            <div class="form-actions field-full">
+                <button type="submit" class="btn btn-primary"
+                        th:text="${rolId} != null ? 'Guardar cambios' : 'Guardar rol'">Guardar</button>
+                <a th:href="@{/roles}" class="btn btn-ghost">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

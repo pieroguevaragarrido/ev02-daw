@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Médicos — Citas Médicas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: topbar}"></header>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Médicos</h1>
+            <p>Médicos registrados y cantidad de citas asignadas.</p>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <div class="table-scroll">
+            <table th:if="${not #lists.isEmpty(medicos)}">
+                <thead>
+                <tr><th>Código</th><th>Médico</th><th>Especialidad</th><th>Estado</th><th>Citas</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="m : ${medicos}">
+                    <td class="codigo" th:text="${m.codigo}"></td>
+                    <td th:text="${m.nombreCompleto}"></td>
+                    <td th:text="${m.especialidad}"></td>
+                    <td><span class="badge badge-ACTIVO" th:text="${m.estado}"></span></td>
+                    <td th:text="${m.totalCitas}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="empty-state" th:if="${#lists.isEmpty(medicos)}">No hay médicos registrados.</div>
+    </div>
+</div>
+</body>
+</html>

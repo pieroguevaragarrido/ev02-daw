@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Auditoría — Citas Médicas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: topbar}"></header>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Bitácora de auditoría</h1>
+            <p>Operaciones registradas automáticamente sobre citas, usuarios y roles.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <form th:action="@{/auditoria}" method="get" class="form-grid">
+            <div class="field">
+                <label>Entidad</label>
+                <select name="entidad">
+                    <option value="">Todas</option>
+                    <option th:each="e : ${entidades}" th:value="${e}" th:text="${e}"
+                            th:selected="${fEntidad != null and fEntidad == e}"></option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Operación</label>
+                <select name="operacion">
+                    <option value="">Todas</option>
+                    <option th:each="o : ${operaciones}" th:value="${o}" th:text="${o}"
+                            th:selected="${fOperacion != null and fOperacion == o}"></option>
+                </select>
+            </div>
+            <div class="field">
+                <label>Usuario</label>
+                <input type="text" name="usuario" th:value="${fUsuario}" placeholder="Ej. recepcion"/>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+                <a th:href="@{/auditoria}" class="btn btn-ghost">Limpiar filtros</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-wrap">
+        <div class="table-scroll">
+            <table th:if="${not #lists.isEmpty(registros)}">
+                <thead>
+                <tr>
+                    <th>Fecha y hora</th>
+                    <th>Usuario</th>
+                    <th>Operación</th>
+                    <th>Entidad</th>
+                    <th>ID registro</th>
+                    <th>Detalle</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="a : ${registros}">
+                    <td th:text="${#temporals.format(a.fechaHora, 'dd/MM/yyyy HH:mm:ss')}"></td>
+                    <td th:text="${a.usuario}"></td>
+                    <td><span class="badge badge-ROL" th:text="${a.operacion}"></span></td>
+                    <td th:text="${a.entidad}"></td>
+                    <td th:text="${a.registroId}"></td>
+                    <td th:text="${a.detalle}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="empty-state" th:if="${#lists.isEmpty(registros)}">No hay registros de auditoría con esos filtros.</div>
+    </div>
+</div>
+</body>
+</html>

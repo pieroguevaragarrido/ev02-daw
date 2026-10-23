@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Roles — Citas Médicas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: topbar}"></header>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Roles</h1>
+            <p>Roles que controlan el acceso a las funcionalidades del sistema.</p>
+        </div>
+        <a th:href="@{/roles/nuevo}" class="btn btn-primary">+ Nuevo rol</a>
+    </div>
+
+    <p class="alert alert-success" th:if="${mensaje}" th:text="${mensaje}"></p>
+    <p class="alert alert-danger" th:if="${error}" th:text="${error}"></p>
+
+    <div class="table-wrap">
+        <div class="table-scroll">
+            <table th:if="${not #lists.isEmpty(roles)}">
+                <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Usuarios</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="r : ${roles}">
+                    <td class="codigo" th:text="${r.nombre}"></td>
+                    <td th:text="${r.descripcion}"></td>
+                    <td th:text="${#lists.size(r.usuarios)}"></td>
+                    <td>
+                        <span class="badge" th:classappend="${r.activo} ? 'badge-ACTIVO' : 'badge-INACTIVO'"
+                              th:text="${r.activo} ? 'ACTIVO' : 'INACTIVO'"></span>
+                    </td>
+                    <td class="acciones">
+                        <a th:href="@{'/roles/' + ${r.id} + '/editar'}" class="btn btn-ghost btn-sm">Editar</a>
+                        <form th:action="@{'/roles/' + ${r.id} + '/estado'}" method="post" class="inline-form">
+                            <button type="submit" class="btn btn-ghost btn-sm"
+                                    th:text="${r.activo} ? 'Desactivar' : 'Activar'">Desactivar</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="empty-state" th:if="${#lists.isEmpty(roles)}">No hay roles registrados.</div>
+    </div>
+</div>
+</body>
+</html>

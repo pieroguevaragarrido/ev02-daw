@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Pacientes — Citas Médicas</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: topbar}"></header>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1>Pacientes</h1>
+            <p>Pacientes registrados y cantidad de citas asociadas.</p>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <div class="table-scroll">
+            <table th:if="${not #lists.isEmpty(pacientes)}">
+                <thead>
+                <tr><th>DNI</th><th>Paciente</th><th>Teléfono</th><th>Citas</th><th>Acciones</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="p : ${pacientes}">
+                    <td class="codigo" th:text="${p.dni}"></td>
+                    <td th:text="${p.nombreCompleto}"></td>
+                    <td th:text="${p.telefono}"></td>
+                    <td th:text="${p.totalCitas}"></td>
+                    <td class="acciones">
+                        <a th:href="@{'/pacientes/' + ${p.id}}" class="btn btn-ghost btn-sm">Ver detalle</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="empty-state" th:if="${#lists.isEmpty(pacientes)}">No hay pacientes registrados.</div>
+    </div>
+</div>
+</body>
+</html>

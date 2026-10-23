@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${usuarioId} != null ? 'Editar usuario — Citas Médicas' : 'Registrar usuario — Citas Médicas'">Usuario</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+<header th:replace="~{fragments/layout :: topbar}"></header>
+
+<div class="page">
+    <div class="page-header">
+        <div>
+            <h1 th:text="${usuarioId} != null ? 'Editar usuario' : 'Registrar usuario'">Registrar usuario</h1>
+            <p th:text="${usuarioId} != null ? 'Modifica los datos o el rol del usuario.' : 'Completa los datos para crear un usuario y asignarle un rol.'"></p>
+        </div>
+    </div>
+
+    <div class="card">
+        <p class="alert alert-danger" th:if="${errorNegocio}" th:text="${errorNegocio}"></p>
+
+        <form th:action="${usuarioId} != null ? @{'/usuarios/' + ${usuarioId}} : @{/usuarios}"
+              th:object="${usuarioForm}" method="post" class="form-grid">
+
+            <div class="alert alert-danger field-full" th:if="${#fields.hasErrors('*')}">
+                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+            </div>
+
+            <div class="field">
+                <label>Usuario</label>
+                <input type="text" th:field="*{username}" th:readonly="${usuarioId != null}" autocomplete="off"/>
+                <div class="hint" th:if="${usuarioId != null}">El nombre de usuario no se puede modificar.</div>
+            </div>
+
+            <div class="field">
+                <label th:text="${usuarioId != null} ? 'Nueva contraseña (opcional)' : 'Contraseña'">Contraseña</label>
+                <input type="password" name="password" autocomplete="new-password"/>
+                <div class="hint" th:if="${usuarioId != null}">Déjala vacía para conservar la actual. Mínimo 6 caracteres.</div>
+                <div class="hint" th:if="${usuarioId == null}">Mínimo 6 caracteres.</div>
+            </div>
+
+            <div class="field">
+                <label>Nombres</label>
+                <input type="text" th:field="*{nombres}"/>
+            </div>
+
+            <div class="field">
+                <label>Apellidos</label>
+                <input type="text" th:field="*{apellidos}"/>
+            </div>
+
+            <div class="field">
+                <label>Rol</label>
+                <select th:field="*{rolId}">
+                    <option value="" disabled selected>Selecciona un rol</option>
+                    <option th:each="r : ${roles}" th:value="${r.id}"
+                            th:text="${r.descripcion} + ' (' + ${r.nombre} + ')'"></option>
+                </select>
+            </div>
+
+            <div class="form-actions field-full">
+                <button type="submit" class="btn btn-primary"
+                        th:text="${usuarioId} != null ? 'Guardar cambios' : 'Guardar usuario'">Guardar</button>
+                <a th:href="@{/usuarios}" class="btn btn-ghost">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
